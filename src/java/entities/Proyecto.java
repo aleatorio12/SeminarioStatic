@@ -15,12 +15,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -82,17 +80,10 @@ public class Proyecto implements Serializable {
     private Character estado;
     @ManyToMany(mappedBy = "proyectoList")
     private List<Auditor> auditorList;
-    @JoinColumn(name = "ENTE_EJECUTOR", referencedColumnName = "ID_ENTE")
-    @ManyToOne(optional = false)
-    private Ente enteEjecutor;
-    @JoinColumn(name = "ENTE_RECTOR", referencedColumnName = "ID_ENTE")
-    @ManyToOne(optional = false)
-    private Ente enteRector;
-    @JoinColumn(name = "ENTE_SUPERVISOR", referencedColumnName = "ID_ENTE")
-    @ManyToOne(optional = false)
-    private Ente enteSupervisor;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "proyecto1")
-    private Fase fase;
+    @ManyToMany(mappedBy = "proyectoList")
+    private List<Ente> enteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proyecto1")
+    private List<ProyectoDetalle> proyectoDetalleList;
 
     public Proyecto() {
     }
@@ -182,36 +173,22 @@ public class Proyecto implements Serializable {
         this.auditorList = auditorList;
     }
 
-    public Ente getEnteEjecutor() {
-        return enteEjecutor;
+    @XmlTransient
+    public List<Ente> getEnteList() {
+        return enteList;
     }
 
-    public void setEnteEjecutor(Ente enteEjecutor) {
-        this.enteEjecutor = enteEjecutor;
+    public void setEnteList(List<Ente> enteList) {
+        this.enteList = enteList;
     }
 
-    public Ente getEnteRector() {
-        return enteRector;
+    @XmlTransient
+    public List<ProyectoDetalle> getProyectoDetalleList() {
+        return proyectoDetalleList;
     }
 
-    public void setEnteRector(Ente enteRector) {
-        this.enteRector = enteRector;
-    }
-
-    public Ente getEnteSupervisor() {
-        return enteSupervisor;
-    }
-
-    public void setEnteSupervisor(Ente enteSupervisor) {
-        this.enteSupervisor = enteSupervisor;
-    }
-
-    public Fase getFase() {
-        return fase;
-    }
-
-    public void setFase(Fase fase) {
-        this.fase = fase;
+    public void setProyectoDetalleList(List<ProyectoDetalle> proyectoDetalleList) {
+        this.proyectoDetalleList = proyectoDetalleList;
     }
 
     @Override

@@ -8,16 +8,19 @@ package entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -34,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Ente.findByIdEnte", query = "SELECT e FROM Ente e WHERE e.idEnte = :idEnte"),
     @NamedQuery(name = "Ente.findByNombre", query = "SELECT e FROM Ente e WHERE e.nombre = :nombre"),
     @NamedQuery(name = "Ente.findByDireccion", query = "SELECT e FROM Ente e WHERE e.direccion = :direccion"),
-    @NamedQuery(name = "Ente.findByTipo", query = "SELECT e FROM Ente e WHERE e.tipo = :tipo")})
+    @NamedQuery(name = "Ente.findByTipoEnte", query = "SELECT e FROM Ente e WHERE e.tipoEnte = :tipoEnte")})
 public class Ente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,20 +52,29 @@ public class Ente implements Serializable {
     @Size(max = 45)
     @Column(name = "DIRECCION")
     private String direccion;
-    @Column(name = "TIPO")
-    private Character tipo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "enteEjecutor")
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "TIPO_ENTE")
+    private int tipoEnte;
+    @JoinTable(name = "ENTE_PROYECTO", joinColumns = {
+        @JoinColumn(name = "ENTE", referencedColumnName = "ID_ENTE")}, inverseJoinColumns = {
+        @JoinColumn(name = "PROYECTO", referencedColumnName = "NOG")})
+    @ManyToMany
     private List<Proyecto> proyectoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "enteRector")
-    private List<Proyecto> proyectoList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "enteSupervisor")
-    private List<Proyecto> proyectoList2;
+    @JoinColumn(name = "ID_ENTE", referencedColumnName = "ID_TIPO_ENTE", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private TipoEnte tipoEnte1;
 
     public Ente() {
     }
 
     public Ente(Integer idEnte) {
         this.idEnte = idEnte;
+    }
+
+    public Ente(Integer idEnte, int tipoEnte) {
+        this.idEnte = idEnte;
+        this.tipoEnte = tipoEnte;
     }
 
     public Integer getIdEnte() {
@@ -89,12 +101,12 @@ public class Ente implements Serializable {
         this.direccion = direccion;
     }
 
-    public Character getTipo() {
-        return tipo;
+    public int getTipoEnte() {
+        return tipoEnte;
     }
 
-    public void setTipo(Character tipo) {
-        this.tipo = tipo;
+    public void setTipoEnte(int tipoEnte) {
+        this.tipoEnte = tipoEnte;
     }
 
     @XmlTransient
@@ -106,22 +118,12 @@ public class Ente implements Serializable {
         this.proyectoList = proyectoList;
     }
 
-    @XmlTransient
-    public List<Proyecto> getProyectoList1() {
-        return proyectoList1;
+    public TipoEnte getTipoEnte1() {
+        return tipoEnte1;
     }
 
-    public void setProyectoList1(List<Proyecto> proyectoList1) {
-        this.proyectoList1 = proyectoList1;
-    }
-
-    @XmlTransient
-    public List<Proyecto> getProyectoList2() {
-        return proyectoList2;
-    }
-
-    public void setProyectoList2(List<Proyecto> proyectoList2) {
-        this.proyectoList2 = proyectoList2;
+    public void setTipoEnte1(TipoEnte tipoEnte1) {
+        this.tipoEnte1 = tipoEnte1;
     }
 
     @Override

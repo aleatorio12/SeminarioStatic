@@ -18,6 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,14 +35,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Auditor.findAll", query = "SELECT a FROM Auditor a"),
     @NamedQuery(name = "Auditor.findByIdAuditor", query = "SELECT a FROM Auditor a WHERE a.idAuditor = :idAuditor"),
-    @NamedQuery(name = "Auditor.findByUsername", query = "SELECT a FROM Auditor a WHERE a.username = :username"),
-    @NamedQuery(name = "Auditor.findByPassword", query = "SELECT a FROM Auditor a WHERE a.password = :password"),
     @NamedQuery(name = "Auditor.findByPrimerNombre", query = "SELECT a FROM Auditor a WHERE a.primerNombre = :primerNombre"),
     @NamedQuery(name = "Auditor.findBySegundoNombre", query = "SELECT a FROM Auditor a WHERE a.segundoNombre = :segundoNombre"),
-    @NamedQuery(name = "Auditor.findByTercerNombre", query = "SELECT a FROM Auditor a WHERE a.tercerNombre = :tercerNombre"),
     @NamedQuery(name = "Auditor.findByPrimerApellido", query = "SELECT a FROM Auditor a WHERE a.primerApellido = :primerApellido"),
     @NamedQuery(name = "Auditor.findBySegundoApellido", query = "SELECT a FROM Auditor a WHERE a.segundoApellido = :segundoApellido"),
-    @NamedQuery(name = "Auditor.findByCorrecoElectronico", query = "SELECT a FROM Auditor a WHERE a.correcoElectronico = :correcoElectronico"),
+    @NamedQuery(name = "Auditor.findByEmail", query = "SELECT a FROM Auditor a WHERE a.email = :email"),
     @NamedQuery(name = "Auditor.findByTelefono", query = "SELECT a FROM Auditor a WHERE a.telefono = :telefono")})
 public class Auditor implements Serializable {
 
@@ -54,16 +52,6 @@ public class Auditor implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "USERNAME")
-    private String username;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "PASSWORD")
-    private String password;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
     @Column(name = "PRIMER_NOMBRE")
     private String primerNombre;
     @Basic(optional = false)
@@ -71,9 +59,6 @@ public class Auditor implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "SEGUNDO_NOMBRE")
     private String segundoNombre;
-    @Size(max = 45)
-    @Column(name = "TERCER_NOMBRE")
-    private String tercerNombre;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -84,9 +69,10 @@ public class Auditor implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "SEGUNDO_APELLIDO")
     private String segundoApellido;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 45)
-    @Column(name = "CORRECO_ELECTRONICO")
-    private String correcoElectronico;
+    @Column(name = "EMAIL")
+    private String email;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 8)
@@ -97,6 +83,9 @@ public class Auditor implements Serializable {
         @JoinColumn(name = "PROYECTO", referencedColumnName = "NOG")})
     @ManyToMany
     private List<Proyecto> proyectoList;
+    @JoinColumn(name = "ID_AUDITOR", referencedColumnName = "ID_USUARIO", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private Usuario usuario;
 
     public Auditor() {
     }
@@ -105,10 +94,8 @@ public class Auditor implements Serializable {
         this.idAuditor = idAuditor;
     }
 
-    public Auditor(Integer idAuditor, String username, String password, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String telefono) {
+    public Auditor(Integer idAuditor, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, String telefono) {
         this.idAuditor = idAuditor;
-        this.username = username;
-        this.password = password;
         this.primerNombre = primerNombre;
         this.segundoNombre = segundoNombre;
         this.primerApellido = primerApellido;
@@ -122,22 +109,6 @@ public class Auditor implements Serializable {
 
     public void setIdAuditor(Integer idAuditor) {
         this.idAuditor = idAuditor;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getPrimerNombre() {
@@ -156,14 +127,6 @@ public class Auditor implements Serializable {
         this.segundoNombre = segundoNombre;
     }
 
-    public String getTercerNombre() {
-        return tercerNombre;
-    }
-
-    public void setTercerNombre(String tercerNombre) {
-        this.tercerNombre = tercerNombre;
-    }
-
     public String getPrimerApellido() {
         return primerApellido;
     }
@@ -180,12 +143,12 @@ public class Auditor implements Serializable {
         this.segundoApellido = segundoApellido;
     }
 
-    public String getCorrecoElectronico() {
-        return correcoElectronico;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorrecoElectronico(String correcoElectronico) {
-        this.correcoElectronico = correcoElectronico;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getTelefono() {
@@ -203,6 +166,14 @@ public class Auditor implements Serializable {
 
     public void setProyectoList(List<Proyecto> proyectoList) {
         this.proyectoList = proyectoList;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override

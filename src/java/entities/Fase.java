@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,9 +15,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,6 +25,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,7 +37,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Fase.findAll", query = "SELECT f FROM Fase f"),
     @NamedQuery(name = "Fase.findByIdFase", query = "SELECT f FROM Fase f WHERE f.idFase = :idFase"),
-    @NamedQuery(name = "Fase.findByProyecto", query = "SELECT f FROM Fase f WHERE f.proyecto = :proyecto"),
     @NamedQuery(name = "Fase.findByNombre", query = "SELECT f FROM Fase f WHERE f.nombre = :nombre"),
     @NamedQuery(name = "Fase.findByFechaInicio", query = "SELECT f FROM Fase f WHERE f.fechaInicio = :fechaInicio"),
     @NamedQuery(name = "Fase.findByFechaFinalizacion", query = "SELECT f FROM Fase f WHERE f.fechaFinalizacion = :fechaFinalizacion"),
@@ -48,10 +49,6 @@ public class Fase implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_FASE")
     private Integer idFase;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "PROYECTO")
-    private int proyecto;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -69,9 +66,8 @@ public class Fase implements Serializable {
     private Character estado;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "fase1")
     private Archivo archivo;
-    @JoinColumn(name = "ID_FASE", referencedColumnName = "NOG", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Proyecto proyecto1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fase1")
+    private List<ProyectoDetalle> proyectoDetalleList;
 
     public Fase() {
     }
@@ -80,9 +76,8 @@ public class Fase implements Serializable {
         this.idFase = idFase;
     }
 
-    public Fase(Integer idFase, int proyecto, String nombre, Character estado) {
+    public Fase(Integer idFase, String nombre, Character estado) {
         this.idFase = idFase;
-        this.proyecto = proyecto;
         this.nombre = nombre;
         this.estado = estado;
     }
@@ -93,14 +88,6 @@ public class Fase implements Serializable {
 
     public void setIdFase(Integer idFase) {
         this.idFase = idFase;
-    }
-
-    public int getProyecto() {
-        return proyecto;
-    }
-
-    public void setProyecto(int proyecto) {
-        this.proyecto = proyecto;
     }
 
     public String getNombre() {
@@ -143,12 +130,13 @@ public class Fase implements Serializable {
         this.archivo = archivo;
     }
 
-    public Proyecto getProyecto1() {
-        return proyecto1;
+    @XmlTransient
+    public List<ProyectoDetalle> getProyectoDetalleList() {
+        return proyectoDetalleList;
     }
 
-    public void setProyecto1(Proyecto proyecto1) {
-        this.proyecto1 = proyecto1;
+    public void setProyectoDetalleList(List<ProyectoDetalle> proyectoDetalleList) {
+        this.proyectoDetalleList = proyectoDetalleList;
     }
 
     @Override
