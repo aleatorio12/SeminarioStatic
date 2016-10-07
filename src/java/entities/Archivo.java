@@ -14,9 +14,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Victor Matías <Carné: 4490-13-5931> <vitomany@yahoo.es>
+ * @author yerdmi
  */
 @Entity
 @Table(name = "ARCHIVO")
@@ -32,12 +32,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Archivo.findAll", query = "SELECT a FROM Archivo a"),
     @NamedQuery(name = "Archivo.findByIdArchivo", query = "SELECT a FROM Archivo a WHERE a.idArchivo = :idArchivo"),
-    @NamedQuery(name = "Archivo.findByFase", query = "SELECT a FROM Archivo a WHERE a.fase = :fase"),
     @NamedQuery(name = "Archivo.findByNombre", query = "SELECT a FROM Archivo a WHERE a.nombre = :nombre"),
     @NamedQuery(name = "Archivo.findByFechaSolicitud", query = "SELECT a FROM Archivo a WHERE a.fechaSolicitud = :fechaSolicitud"),
     @NamedQuery(name = "Archivo.findByFechaRecepcion", query = "SELECT a FROM Archivo a WHERE a.fechaRecepcion = :fechaRecepcion"),
     @NamedQuery(name = "Archivo.findByTipo", query = "SELECT a FROM Archivo a WHERE a.tipo = :tipo")})
 public class Archivo implements Serializable {
+
+    @Basic(optional = false)
+    @NotNull
+    @Lob
+    @Column(name = "CONTENIDO")
+    private byte[] contenido;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -45,15 +50,6 @@ public class Archivo implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_ARCHIVO")
     private Integer idArchivo;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "FASE")
-    private int fase;
-    @Basic(optional = false)
-    @NotNull
-    @Lob
-    @Column(name = "CONTENIDO")
-    private byte[] contenido;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -73,9 +69,9 @@ public class Archivo implements Serializable {
     private String fechaRecepcion;
     @Column(name = "TIPO")
     private Character tipo;
-    @JoinColumn(name = "ID_ARCHIVO", referencedColumnName = "ID_FASE", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Fase fase1;
+    @JoinColumn(name = "FASE", referencedColumnName = "ID_FASE")
+    @ManyToOne(optional = false)
+    private Fase fase;
 
     public Archivo() {
     }
@@ -84,9 +80,8 @@ public class Archivo implements Serializable {
         this.idArchivo = idArchivo;
     }
 
-    public Archivo(Integer idArchivo, int fase, byte[] contenido, String nombre, String comentario) {
+    public Archivo(Integer idArchivo, byte[] contenido, String nombre, String comentario) {
         this.idArchivo = idArchivo;
-        this.fase = fase;
         this.contenido = contenido;
         this.nombre = nombre;
         this.comentario = comentario;
@@ -100,21 +95,6 @@ public class Archivo implements Serializable {
         this.idArchivo = idArchivo;
     }
 
-    public int getFase() {
-        return fase;
-    }
-
-    public void setFase(int fase) {
-        this.fase = fase;
-    }
-
-    public byte[] getContenido() {
-        return contenido;
-    }
-
-    public void setContenido(byte[] contenido) {
-        this.contenido = contenido;
-    }
 
     public String getNombre() {
         return nombre;
@@ -156,12 +136,12 @@ public class Archivo implements Serializable {
         this.tipo = tipo;
     }
 
-    public Fase getFase1() {
-        return fase1;
+    public Fase getFase() {
+        return fase;
     }
 
-    public void setFase1(Fase fase1) {
-        this.fase1 = fase1;
+    public void setFase(Fase fase) {
+        this.fase = fase;
     }
 
     @Override
@@ -187,6 +167,14 @@ public class Archivo implements Serializable {
     @Override
     public String toString() {
         return "entities.Archivo[ idArchivo=" + idArchivo + " ]";
+    }
+
+    public byte[] getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(byte[] contenido) {
+        this.contenido = contenido;
     }
     
 }

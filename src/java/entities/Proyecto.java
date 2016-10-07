@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Victor Matías <Carné: 4490-13-5931> <vitomany@yahoo.es>
+ * @author yerdmi
  */
 @Entity
 @Table(name = "PROYECTO")
@@ -80,8 +80,8 @@ public class Proyecto implements Serializable {
     private Character estado;
     @ManyToMany(mappedBy = "proyectoList")
     private List<Auditor> auditorList;
-    @ManyToMany(mappedBy = "proyectoList")
-    private List<Ente> enteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proyecto1")
+    private List<EnteProyecto> enteProyectoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proyecto1")
     private List<ProyectoDetalle> proyectoDetalleList;
 
@@ -174,12 +174,12 @@ public class Proyecto implements Serializable {
     }
 
     @XmlTransient
-    public List<Ente> getEnteList() {
-        return enteList;
+    public List<EnteProyecto> getEnteProyectoList() {
+        return enteProyectoList;
     }
 
-    public void setEnteList(List<Ente> enteList) {
-        this.enteList = enteList;
+    public void setEnteProyectoList(List<EnteProyecto> enteProyectoList) {
+        this.enteProyectoList = enteProyectoList;
     }
 
     @XmlTransient

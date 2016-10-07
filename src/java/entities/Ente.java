@@ -8,17 +8,15 @@ package entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Victor Matías <Carné: 4490-13-5931> <vitomany@yahoo.es>
+ * @author yerdmi
  */
 @Entity
 @Table(name = "ENTE")
@@ -56,14 +54,8 @@ public class Ente implements Serializable {
     @NotNull
     @Column(name = "TIPO_ENTE")
     private int tipoEnte;
-    @JoinTable(name = "ENTE_PROYECTO", joinColumns = {
-        @JoinColumn(name = "ENTE", referencedColumnName = "ID_ENTE")}, inverseJoinColumns = {
-        @JoinColumn(name = "PROYECTO", referencedColumnName = "NOG")})
-    @ManyToMany
-    private List<Proyecto> proyectoList;
-    @JoinColumn(name = "ID_ENTE", referencedColumnName = "ID_TIPO_ENTE", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private TipoEnte tipoEnte1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ente1")
+    private List<EnteProyecto> enteProyectoList;
 
     public Ente() {
     }
@@ -110,20 +102,12 @@ public class Ente implements Serializable {
     }
 
     @XmlTransient
-    public List<Proyecto> getProyectoList() {
-        return proyectoList;
+    public List<EnteProyecto> getEnteProyectoList() {
+        return enteProyectoList;
     }
 
-    public void setProyectoList(List<Proyecto> proyectoList) {
-        this.proyectoList = proyectoList;
-    }
-
-    public TipoEnte getTipoEnte1() {
-        return tipoEnte1;
-    }
-
-    public void setTipoEnte1(TipoEnte tipoEnte1) {
-        this.tipoEnte1 = tipoEnte1;
+    public void setEnteProyectoList(List<EnteProyecto> enteProyectoList) {
+        this.enteProyectoList = enteProyectoList;
     }
 
     @Override

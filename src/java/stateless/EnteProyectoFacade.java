@@ -5,17 +5,17 @@
  */
 package stateless;
 
-import entities.TipoEnte;
+import entities.EnteProyecto;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Victor Matías <Carné: 4490-13-5931> <vitomany@yahoo.es>
+ * @author yerdmi
  */
 @Stateless
-public class TipoEnteFacade extends AbstractFacade<TipoEnte> {
+public class EnteProyectoFacade extends AbstractFacade<EnteProyecto> {
 
     @PersistenceContext(unitName = "EJBModulePjSeminarioPU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class TipoEnteFacade extends AbstractFacade<TipoEnte> {
         return em;
     }
 
-    public TipoEnteFacade() {
-        super(TipoEnte.class);
+    public EnteProyectoFacade() {
+        super(EnteProyecto.class);
     }
     
 }

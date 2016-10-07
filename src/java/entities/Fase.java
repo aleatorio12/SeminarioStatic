@@ -18,7 +18,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Victor Matías <Carné: 4490-13-5931> <vitomany@yahoo.es>
+ * @author yerdmi
  */
 @Entity
 @Table(name = "FASE")
@@ -64,8 +63,8 @@ public class Fase implements Serializable {
     @NotNull
     @Column(name = "ESTADO")
     private Character estado;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "fase1")
-    private Archivo archivo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fase")
+    private List<Archivo> archivoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fase1")
     private List<ProyectoDetalle> proyectoDetalleList;
 
@@ -122,12 +121,13 @@ public class Fase implements Serializable {
         this.estado = estado;
     }
 
-    public Archivo getArchivo() {
-        return archivo;
+    @XmlTransient
+    public List<Archivo> getArchivoList() {
+        return archivoList;
     }
 
-    public void setArchivo(Archivo archivo) {
-        this.archivo = archivo;
+    public void setArchivoList(List<Archivo> archivoList) {
+        this.archivoList = archivoList;
     }
 
     @XmlTransient

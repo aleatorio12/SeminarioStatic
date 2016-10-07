@@ -16,22 +16,31 @@ import javax.validation.constraints.NotNull;
  * @author yerdmi
  */
 @Embeddable
-public class ProyectoDetallePK implements Serializable {
+public class EnteProyectoPK implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ENTE")
+    private int ente;
     @Basic(optional = false)
     @NotNull
     @Column(name = "PROYECTO")
     private int proyecto;
-    @Basic(optional = false)
-    @Column(name = "FASE")
-    private int fase;
 
-    public ProyectoDetallePK() {
+    public EnteProyectoPK() {
     }
 
-    public ProyectoDetallePK(int proyecto, int fase) {
+    public EnteProyectoPK(int ente, int proyecto) {
+        this.ente = ente;
         this.proyecto = proyecto;
-        this.fase = fase;
+    }
+
+    public int getEnte() {
+        return ente;
+    }
+
+    public void setEnte(int ente) {
+        this.ente = ente;
     }
 
     public int getProyecto() {
@@ -42,33 +51,25 @@ public class ProyectoDetallePK implements Serializable {
         this.proyecto = proyecto;
     }
 
-    public int getFase() {
-        return fase;
-    }
-
-    public void setFase(int fase) {
-        this.fase = fase;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
+        hash += (int) ente;
         hash += (int) proyecto;
-        hash += (int) fase;
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProyectoDetallePK)) {
+        if (!(object instanceof EnteProyectoPK)) {
             return false;
         }
-        ProyectoDetallePK other = (ProyectoDetallePK) object;
+        EnteProyectoPK other = (EnteProyectoPK) object;
+        if (this.ente != other.ente) {
+            return false;
+        }
         if (this.proyecto != other.proyecto) {
-            return false;
-        }
-        if (this.fase != other.fase) {
             return false;
         }
         return true;
@@ -76,7 +77,7 @@ public class ProyectoDetallePK implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.ProyectoDetallePK[ proyecto=" + proyecto + ", fase=" + fase + " ]";
+        return "entities.EnteProyectoPK[ ente=" + ente + ", proyecto=" + proyecto + " ]";
     }
     
 }
