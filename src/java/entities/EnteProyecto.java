@@ -16,11 +16,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author yerdmi
+ * @author Victor Matías <Carné: 4490-13-5931> <vitomany@yahoo.es>
  */
 @Entity
 @Table(name = "ENTE_PROYECTO")
@@ -37,8 +38,9 @@ public class EnteProyecto implements Serializable {
     protected EnteProyectoPK enteProyectoPK;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 10)
     @Column(name = "ROL")
-    private Character rol;
+    private String rol;
     @JoinColumn(name = "ENTE", referencedColumnName = "ID_ENTE", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Ente ente1;
@@ -53,7 +55,7 @@ public class EnteProyecto implements Serializable {
         this.enteProyectoPK = enteProyectoPK;
     }
 
-    public EnteProyecto(EnteProyectoPK enteProyectoPK, Character rol) {
+    public EnteProyecto(EnteProyectoPK enteProyectoPK, String rol) {
         this.enteProyectoPK = enteProyectoPK;
         this.rol = rol;
     }
@@ -70,11 +72,11 @@ public class EnteProyecto implements Serializable {
         this.enteProyectoPK = enteProyectoPK;
     }
 
-    public Character getRol() {
+    public String getRol() {
         return rol;
     }
 
-    public void setRol(Character rol) {
+    public void setRol(String rol) {
         this.rol = rol;
     }
 

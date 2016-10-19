@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author yerdmi
+ * @author Victor Matías <Carné: 4490-13-5931> <vitomany@yahoo.es>
  */
 @Embeddable
 public class EnteProyectoPK implements Serializable {

@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,13 +19,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author yerdmi
+ * @author Victor Matías <Carné: 4490-13-5931> <vitomany@yahoo.es>
  */
 @Entity
 @Table(name = "ARCHIVO")
@@ -38,18 +41,17 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Archivo.findByTipo", query = "SELECT a FROM Archivo a WHERE a.tipo = :tipo")})
 public class Archivo implements Serializable {
 
-    @Basic(optional = false)
-    @NotNull
-    @Lob
-    @Column(name = "CONTENIDO")
-    private byte[] contenido;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID_ARCHIVO")
     private Integer idArchivo;
+    @Basic(optional = false)
+    @NotNull
+    @Lob
+    @Column(name = "CONTENIDO")
+    private byte[] contenido;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -61,12 +63,12 @@ public class Archivo implements Serializable {
     @Size(min = 1, max = 2147483647)
     @Column(name = "COMENTARIO")
     private String comentario;
-    @Size(max = 45)
     @Column(name = "FECHA_SOLICITUD")
-    private String fechaSolicitud;
-    @Size(max = 45)
+    @Temporal(TemporalType.DATE)
+    private Date fechaSolicitud;
     @Column(name = "FECHA_RECEPCION")
-    private String fechaRecepcion;
+    @Temporal(TemporalType.DATE)
+    private Date fechaRecepcion;
     @Column(name = "TIPO")
     private Character tipo;
     @JoinColumn(name = "FASE", referencedColumnName = "ID_FASE")
@@ -95,6 +97,13 @@ public class Archivo implements Serializable {
         this.idArchivo = idArchivo;
     }
 
+    public byte[] getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(byte[] contenido) {
+        this.contenido = contenido;
+    }
 
     public String getNombre() {
         return nombre;
@@ -112,19 +121,19 @@ public class Archivo implements Serializable {
         this.comentario = comentario;
     }
 
-    public String getFechaSolicitud() {
+    public Date getFechaSolicitud() {
         return fechaSolicitud;
     }
 
-    public void setFechaSolicitud(String fechaSolicitud) {
+    public void setFechaSolicitud(Date fechaSolicitud) {
         this.fechaSolicitud = fechaSolicitud;
     }
 
-    public String getFechaRecepcion() {
+    public Date getFechaRecepcion() {
         return fechaRecepcion;
     }
 
-    public void setFechaRecepcion(String fechaRecepcion) {
+    public void setFechaRecepcion(Date fechaRecepcion) {
         this.fechaRecepcion = fechaRecepcion;
     }
 
@@ -167,14 +176,6 @@ public class Archivo implements Serializable {
     @Override
     public String toString() {
         return "entities.Archivo[ idArchivo=" + idArchivo + " ]";
-    }
-
-    public byte[] getContenido() {
-        return contenido;
-    }
-
-    public void setContenido(byte[] contenido) {
-        this.contenido = contenido;
     }
     
 }

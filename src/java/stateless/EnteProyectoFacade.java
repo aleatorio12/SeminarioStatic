@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author yerdmi
+ * @author Victor Matías <Carné: 4490-13-5931> <vitomany@yahoo.es>
  */
 @Stateless
 public class EnteProyectoFacade extends AbstractFacade<EnteProyecto> {

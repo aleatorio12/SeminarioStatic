@@ -18,14 +18,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author yerdmi
+ * @author Victor Matías <Carné: 4490-13-5931> <vitomany@yahoo.es>
  */
 @Entity
 @Table(name = "ENTE")
@@ -34,8 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Ente.findAll", query = "SELECT e FROM Ente e"),
     @NamedQuery(name = "Ente.findByIdEnte", query = "SELECT e FROM Ente e WHERE e.idEnte = :idEnte"),
     @NamedQuery(name = "Ente.findByNombre", query = "SELECT e FROM Ente e WHERE e.nombre = :nombre"),
-    @NamedQuery(name = "Ente.findByDireccion", query = "SELECT e FROM Ente e WHERE e.direccion = :direccion"),
-    @NamedQuery(name = "Ente.findByTipoEnte", query = "SELECT e FROM Ente e WHERE e.tipoEnte = :tipoEnte")})
+    @NamedQuery(name = "Ente.findByDireccion", query = "SELECT e FROM Ente e WHERE e.direccion = :direccion")})
 public class Ente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,10 +48,6 @@ public class Ente implements Serializable {
     @Size(max = 45)
     @Column(name = "DIRECCION")
     private String direccion;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "TIPO_ENTE")
-    private int tipoEnte;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ente1")
     private List<EnteProyecto> enteProyectoList;
 
@@ -62,11 +56,6 @@ public class Ente implements Serializable {
 
     public Ente(Integer idEnte) {
         this.idEnte = idEnte;
-    }
-
-    public Ente(Integer idEnte, int tipoEnte) {
-        this.idEnte = idEnte;
-        this.tipoEnte = tipoEnte;
     }
 
     public Integer getIdEnte() {
@@ -91,14 +80,6 @@ public class Ente implements Serializable {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
-    }
-
-    public int getTipoEnte() {
-        return tipoEnte;
-    }
-
-    public void setTipoEnte(int tipoEnte) {
-        this.tipoEnte = tipoEnte;
     }
 
     @XmlTransient

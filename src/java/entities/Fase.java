@@ -15,6 +15,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -28,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author yerdmi
+ * @author Victor Matías <Carné: 4490-13-5931> <vitomany@yahoo.es>
  */
 @Entity
 @Table(name = "FASE")
@@ -61,12 +64,16 @@ public class Fase implements Serializable {
     private Date fechaFinalizacion;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 13)
     @Column(name = "ESTADO")
-    private Character estado;
+    private String estado;
+    @JoinTable(name = "PROYECTO_DETALLE", joinColumns = {
+        @JoinColumn(name = "FASE", referencedColumnName = "ID_FASE")}, inverseJoinColumns = {
+        @JoinColumn(name = "PROYECTO", referencedColumnName = "NOG")})
+    @ManyToMany
+    private List<Proyecto> proyectoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fase")
     private List<Archivo> archivoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fase1")
-    private List<ProyectoDetalle> proyectoDetalleList;
 
     public Fase() {
     }
@@ -75,7 +82,7 @@ public class Fase implements Serializable {
         this.idFase = idFase;
     }
 
-    public Fase(Integer idFase, String nombre, Character estado) {
+    public Fase(Integer idFase, String nombre, String estado) {
         this.idFase = idFase;
         this.nombre = nombre;
         this.estado = estado;
@@ -113,12 +120,21 @@ public class Fase implements Serializable {
         this.fechaFinalizacion = fechaFinalizacion;
     }
 
-    public Character getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(Character estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    @XmlTransient
+    public List<Proyecto> getProyectoList() {
+        return proyectoList;
+    }
+
+    public void setProyectoList(List<Proyecto> proyectoList) {
+        this.proyectoList = proyectoList;
     }
 
     @XmlTransient
@@ -128,15 +144,6 @@ public class Fase implements Serializable {
 
     public void setArchivoList(List<Archivo> archivoList) {
         this.archivoList = archivoList;
-    }
-
-    @XmlTransient
-    public List<ProyectoDetalle> getProyectoDetalleList() {
-        return proyectoDetalleList;
-    }
-
-    public void setProyectoDetalleList(List<ProyectoDetalle> proyectoDetalleList) {
-        this.proyectoDetalleList = proyectoDetalleList;
     }
 
     @Override
