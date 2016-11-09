@@ -21,7 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -47,20 +46,14 @@ public class Archivo implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_ARCHIVO")
     private Integer idArchivo;
-    @Basic(optional = false)
-    @NotNull
     @Lob
     @Column(name = "CONTENIDO")
     private byte[] contenido;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
+    @Size(max = 45)
     @Column(name = "NOMBRE")
     private String nombre;
-    @Basic(optional = false)
-    @NotNull
     @Lob
-    @Size(min = 1, max = 2147483647)
+    @Size(max = 2147483647)
     @Column(name = "COMENTARIO")
     private String comentario;
     @Column(name = "FECHA_SOLICITUD")
@@ -80,13 +73,6 @@ public class Archivo implements Serializable {
 
     public Archivo(Integer idArchivo) {
         this.idArchivo = idArchivo;
-    }
-
-    public Archivo(Integer idArchivo, byte[] contenido, String nombre, String comentario) {
-        this.idArchivo = idArchivo;
-        this.contenido = contenido;
-        this.nombre = nombre;
-        this.comentario = comentario;
     }
 
     public Integer getIdArchivo() {
