@@ -67,6 +67,11 @@ public class Fase implements Serializable {
     @Size(min = 1, max = 13)
     @Column(name = "ESTADO")
     private String estado;
+    @JoinTable(name = "FASE_HALLAZGO", joinColumns = {
+        @JoinColumn(name = "ID_FASE", referencedColumnName = "ID_FASE")}, inverseJoinColumns = {
+        @JoinColumn(name = "ID_HALLAZGO", referencedColumnName = "ID_HALLAZGO")})
+    @ManyToMany
+    private List<Hallazgo> hallazgoList;
     @JoinTable(name = "PROYECTO_DETALLE", joinColumns = {
         @JoinColumn(name = "FASE", referencedColumnName = "ID_FASE")}, inverseJoinColumns = {
         @JoinColumn(name = "PROYECTO", referencedColumnName = "NOG")})
@@ -126,6 +131,15 @@ public class Fase implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    @XmlTransient
+    public List<Hallazgo> getHallazgoList() {
+        return hallazgoList;
+    }
+
+    public void setHallazgoList(List<Hallazgo> hallazgoList) {
+        this.hallazgoList = hallazgoList;
     }
 
     @XmlTransient

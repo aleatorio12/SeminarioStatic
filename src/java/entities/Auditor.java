@@ -8,6 +8,7 @@ package entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -83,8 +84,7 @@ public class Auditor implements Serializable {
         @JoinColumn(name = "PROYECTO", referencedColumnName = "NOG")})
     @ManyToMany
     private List<Proyecto> proyectoList;
-    @JoinColumn(name = "ID_AUDITOR", referencedColumnName = "ID_USUARIO", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "auditor")
     private Usuario usuario;
 
     public Auditor() {

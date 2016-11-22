@@ -7,12 +7,10 @@ package entities;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -37,8 +35,8 @@ public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @NotNull
     @Column(name = "ID_USUARIO")
     private Integer idUsuario;
     @Basic(optional = false)
@@ -51,7 +49,8 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 128)
     @Column(name = "PASSWORD")
     private String password;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
+    @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_AUDITOR", insertable = false, updatable = false)
+    @OneToOne(optional = false)
     private Auditor auditor;
 
     public Usuario() {

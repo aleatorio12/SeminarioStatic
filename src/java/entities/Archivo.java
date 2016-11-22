@@ -36,8 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Archivo.findByIdArchivo", query = "SELECT a FROM Archivo a WHERE a.idArchivo = :idArchivo"),
     @NamedQuery(name = "Archivo.findByNombre", query = "SELECT a FROM Archivo a WHERE a.nombre = :nombre"),
     @NamedQuery(name = "Archivo.findByFechaSolicitud", query = "SELECT a FROM Archivo a WHERE a.fechaSolicitud = :fechaSolicitud"),
-    @NamedQuery(name = "Archivo.findByFechaRecepcion", query = "SELECT a FROM Archivo a WHERE a.fechaRecepcion = :fechaRecepcion"),
-    @NamedQuery(name = "Archivo.findByTipo", query = "SELECT a FROM Archivo a WHERE a.tipo = :tipo")})
+    @NamedQuery(name = "Archivo.findByFechaRecepcion", query = "SELECT a FROM Archivo a WHERE a.fechaRecepcion = :fechaRecepcion")})
 public class Archivo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -62,8 +61,6 @@ public class Archivo implements Serializable {
     @Column(name = "FECHA_RECEPCION")
     @Temporal(TemporalType.DATE)
     private Date fechaRecepcion;
-    @Column(name = "TIPO")
-    private Character tipo;
     @JoinColumn(name = "FASE", referencedColumnName = "ID_FASE")
     @ManyToOne(optional = false)
     private Fase fase;
@@ -121,14 +118,6 @@ public class Archivo implements Serializable {
 
     public void setFechaRecepcion(Date fechaRecepcion) {
         this.fechaRecepcion = fechaRecepcion;
-    }
-
-    public Character getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(Character tipo) {
-        this.tipo = tipo;
     }
 
     public Fase getFase() {
